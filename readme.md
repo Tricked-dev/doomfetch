@@ -26,6 +26,18 @@ const res = await doomFetch<DenoModuleInterface>(
 console.log(res.data.results[0]);
 ```
 
+```ts
+//Promise<Blob>
+const res = await doomFetch('https://duckduckgo.com', 'GET')
+	.header('from', 'doomfetch :)')
+	//Simple shortcuts to not have todo .then(r=> r.json()) instead just use .json() or .Blob() or any of those methods
+	.blob();
+//Promise<Response>
+const res = await doomFetch('https://duckduckgo.com', 'GET')
+	.redirect(true)
+	.send();
+```
+
 # Documentation
 
 - https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts
