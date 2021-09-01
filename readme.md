@@ -9,7 +9,7 @@ features:
 - light-weight
 - Supports all normal fetch apis + adding queries
 
-### sinple example
+### Simple Example
 
 ```ts
 import { doomFetch } from 'https://deno.land/x/doomfetch/mod.ts';
@@ -22,6 +22,7 @@ const res = await doomFetch<DenoModuleInterface>(
 	.queryMore({
 		limit: '1',
 	})
+	//The json has the `DenoModuleInterface` type
 	.json();
 console.log(res.data.results[0]);
 ```
