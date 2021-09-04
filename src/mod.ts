@@ -20,7 +20,7 @@ export class DoomFetch<T> {
 		body: BodyInit | Record<string | number | symbol, unknown>,
 		sendAs?: 'json' | 'form'
 	) => {
-		if (typeof body == 'object' && body !== null) body = JSON.stringify(body);
+		if (typeof body == 'object') body = JSON.stringify(body);
 		this.#request.body = body;
 		if (sendAs == 'json') this.header('content-type', 'application/json');
 		else if (sendAs == 'form')
