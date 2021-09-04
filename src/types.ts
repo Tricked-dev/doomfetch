@@ -1,4 +1,4 @@
-type Methods =
+export type Methods =
 	| 'GET'
 	| 'get'
 	| 'POST'
@@ -13,6 +13,28 @@ type Methods =
 	| 'head';
 
 //This interface is needed to fix headers thing
-interface FixedRequest extends Omit<RequestInit, 'headers'> {
+export interface FixedRequest extends Omit<RequestInit, 'headers'> {
 	headers: Record<string, string>;
+}
+/**
+ * A useful type to change the return type
+ */
+export type BodyTypes<V = any> = {
+	arrayBuffer: ArrayBuffer;
+	blob: Blob;
+	formData: FormData;
+	json: V;
+	text: string;
+	normal: Response['body'];
+};
+/**
+ * Returns body type with the right json body
+ */
+export type BodyData<T extends keyof BodyTypes<V>, V> = Body<T, V>;
+/**
+ * Returns body type with the right json body
+ */
+export interface Body<T extends keyof BodyTypes<V>, V>
+	extends Omit<Response, 'body'> {
+	readonly body: BodyTypes<V>[T];
 }

@@ -1,5 +1,5 @@
 //Most-Comments (C) Denoland https://github.com/denoland
-import type { FixedRequest, Methods } from './types.ts';
+import type { BodyTypes, FixedRequest, Methods, BodyData } from './types.ts';
 export class DoomFetch<T> {
 	#request: FixedRequest = {
 		headers: {},
@@ -18,7 +18,7 @@ export class DoomFetch<T> {
 	 */
 	body = (
 		body: BodyInit | Record<string | number | symbol, unknown>,
-		sendAs: 'json' | 'form'
+		sendAs?: 'json' | 'form'
 	) => {
 		if (typeof body == 'object' && body !== null) body = JSON.stringify(body);
 		this.#request.body = body;
@@ -84,8 +84,9 @@ export class DoomFetch<T> {
 	integrity = (integrity: string) => this.#setThis('integrity', integrity);
 	/**
 	 * A boolean to set request's keepalive.
+	 * @ts-expect-error -
 	 */
-	keepAlive = (keepAlive: boolean) => this.#setThis('keepAlive', keepAlive);
+	keepAlive = (keepAlive: boolean) => this.#setThis('keepalive', keepAlive);
 	/**
 	 * A string to set request's method.
 	 */
@@ -161,8 +162,41 @@ export class DoomFetch<T> {
 
 	/**
 	 * Send the request and return the normal response
+	 *
+	 * Use arrayBuffer, blob, formData, json, text, normal to return the response with the according body
+	 * @example
+	 * .send("text") //Returns a text response
+	 * .send("json") //Sends a json response with the type you made when doing the request
 	 */
-	send = () => {
-		return fetch(this.url, this.#request);
+	send = async <V extends keyof BodyTypes<T> = 'normal'>(
+		bodyType?: V
+	): Promise<BodyData<V, T>> => {
+		let data;
+		const response = await fetch(this.url, this.#request);
+		switch (bodyType) {
+			case 'arrayBuffer':
+				data = response.arrayBuffer();
+				break;
+			case 'blob':
+				data = response.blob();
+				break;
+			case 'formData':
+				data = response.formData();
+				break;
+			case 'json':
+				data = response.json();
+				break;
+			case 'text':
+				data = response.text();
+				break;
+			default:
+				return response as BodyData<V, T>;
+		}
+		//Hacky solution to avoid the getter
+		Object.defineProperty(response, 'body', {
+			value: await data,
+			writable: false,
+		});
+		return response as BodyData<V, T>;
 	};
 }
