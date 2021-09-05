@@ -2,19 +2,25 @@
 
 A simple utility to make using fetch "easier" using a class based approach
 
-## Tables Of Contents
+## Tables of Contents
 
-    - [Features](#features)
-    - [Using](#using-doomfetch)
-    - [Examples](#simple-example)
-    - [More Examples](#fetching-a-image-and-getting-the-blob)
-    - [Documentation](#Documentation)
+- [DoomFetch](#doomfetch)
+	- [Tables of Contents](#tables-of-contents)
+		- [Features:](#features)
+		- [Using doomFetch](#using-doomfetch)
+			- [Simple Example](#simple-example)
+			- [Fetching a image and getting the blob.](#fetching-a-image-and-getting-the-blob)
+			- [Sending a json body](#sending-a-json-body)
+			- [Specify headers](#specify-headers)
+			- [Clone a request](#clone-a-request)
+			- [More examples](#more-examples)
+	- [Documentation](#documentation)
 
-### features:
+### Features:
 
-- Simple
+- Easy to use
 - Class-Based
-- Light-Weight
+- Light-Weight its just a simple wrapper around fetch
 - Supports all normal fetch apis + adding queries
 - Great typescript support types are automatically generated
 
@@ -24,7 +30,7 @@ A simple utility to make using fetch "easier" using a class based approach
 import { doomFetch } from 'https://deno.land/x/doomfetch/mod.ts';
 ```
 
-### Simple Example
+#### Simple Example
 
 Get the response and return the json
 
@@ -37,7 +43,7 @@ await doomFetch<DenoModuleInterface>('https://api.deno.land/modules', 'GET')
 	.json();
 ```
 
-### Fetching a image and getting the blob.
+#### Fetching a image and getting the blob.
 
 ```ts
 const res = await doomFetch(
@@ -48,7 +54,7 @@ const res = await doomFetch(
 res.body;
 ```
 
-Sending a json body
+#### Sending a json body
 
 ```ts
 await doomFetch('https://example.com')
@@ -58,7 +64,7 @@ await doomFetch('https://example.com')
 	.send('text');
 ```
 
-Specify headers
+#### Specify headers
 
 ```ts
 await doomFetch('https://example.com')
@@ -67,7 +73,14 @@ await doomFetch('https://example.com')
 	.text();
 ```
 
-More examples
+#### Clone a request
+
+```ts
+const request = doomFetch('https://google.com').header('api-key', '');
+const request2 = request.clone().header('content-type', 'application/json');
+```
+
+#### More examples
 
 ```ts
 //Promise<Blob>

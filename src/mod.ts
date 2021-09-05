@@ -7,7 +7,34 @@ export class DoomFetch<T> {
 	constructor(private url: string | URL, method?: Methods) {
 		this.#request.method = method;
 	}
-
+	/**
+	 * Set the request
+	 */
+	set request(i: FixedRequest) {
+		this.#request = i
+	}
+	/**
+	 * Returns the request
+	 */
+	get request() {
+		return this.#request
+	}
+	/**
+	 * Clone the current instance of DoomFetch	
+	 */
+	clone() {
+		const instance = new DoomFetch<T>(this.url, this.#request.method)
+		instance.request = {
+			...this.#request,
+			headers: {
+				...this.#request.headers
+			}
+		}
+		return instance
+	}
+	/**
+	 * Internal function used to simplify code
+	 */
 	#setThis(input: keyof FixedRequest, value: any) {
 		this.#request[input] = value;
 		return this;

@@ -13,8 +13,9 @@ export type Methods =
 	| 'head';
 
 //This interface is needed to fix headers thing
-export interface FixedRequest extends Omit<RequestInit, 'headers'> {
+export interface FixedRequest extends Omit<RequestInit, 'headers' | "method"> {
 	headers: Record<string, string>;
+	method?: Methods
 }
 /**
  * A useful type to change the return type
