@@ -32,7 +32,7 @@ export class DoomFetch<T> {
 	 * const req = doomFetch("https://google.com")	
 	 * const req2 = req.clone().query("search", "doomfetch")
 	 */
-	clone() {
+	clone = () => {
 		const instance = new DoomFetch<T>(this.url, this.#request.method)
 		instance.request = {
 			...this.#request,
