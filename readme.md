@@ -1,3 +1,6 @@
+<!-- [![doomfetch](images/doomfetch.png)](images/doomfetch.png) -->
+<img align="right" src="images/doomfetch.png" height="150px" style=" border-radius: 8px;">
+
 # DoomFetch
 
 A simple utility to make using fetch "easier" using a class based approach
