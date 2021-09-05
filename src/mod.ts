@@ -215,6 +215,7 @@ export class DoomFetch<T> {
 	 * Send the request and return the normal response
 	 *
 	 * Use arrayBuffer, blob, formData, json, text, normal to return the response with the according body
+	 * 
 	 * @example
 	 * .send("text") //Returns a text response
 	 * .send("json") //Sends a json response with the type you made when doing the request
