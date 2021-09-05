@@ -1,5 +1,10 @@
 //Most-Comments (C) Denoland https://github.com/denoland
 import type { BodyTypes, FixedRequest, Methods, BodyData } from './types.ts';
+/**
+ * DoomFetch class documentation:
+ * 
+ * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#DoomFetch
+ */
 export class DoomFetch<T> {
 	#request: FixedRequest = {
 		headers: {},
@@ -21,6 +26,8 @@ export class DoomFetch<T> {
 	}
 	/**
 	 * Clone the current instance of DoomFetch
+	 * 
+	 * 
 	 * @example
 	 * const req = doomFetch("https://google.com")	
 	 * const req2 = req.clone().query("search", "doomfetch")
@@ -82,6 +89,8 @@ export class DoomFetch<T> {
 	/**
 	 * A Headers object, an object literal, or an array of two-item arrays to set
 	 * request's headers.
+	 * 
+	 * 
 	 * @example
 	 * .headers({
 	 * 		authorization: "doomfetch",
@@ -104,6 +113,8 @@ export class DoomFetch<T> {
 	/**
 	 * Add a queries to your url
 	 * request's query
+	 * 
+	 * 
 	 * @example
 	 * .queryMore({
 	 * 	 limit: "1",

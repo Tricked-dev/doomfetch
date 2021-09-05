@@ -12,13 +12,19 @@ export type Methods =
 	| 'HEAD'
 	| 'head';
 
-//This interface is needed to fix headers thing
+/**
+ * Request edited to work better with doomfetch
+ * 
+ * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#FixedRequest
+ */
 export interface FixedRequest extends Omit<RequestInit, 'headers' | "method"> {
 	headers: Record<string, string>;
 	method?: Methods
 }
 /**
  * A useful type to change the return type
+ * 
+ * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#BodyTypes
  */
 export type BodyTypes<V = any> = {
 	arrayBuffer: ArrayBuffer;
@@ -30,10 +36,14 @@ export type BodyTypes<V = any> = {
 };
 /**
  * Returns body type with the right json body
+ * 
+ * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#BodyTypes
  */
 export type BodyData<T extends keyof BodyTypes<V>, V> = Body<T, V>;
 /**
  * Returns body type with the right json body
+ * 
+ * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#Body
  */
 export interface Body<T extends keyof BodyTypes<V>, V>
 	extends Omit<Response, 'body'> {
