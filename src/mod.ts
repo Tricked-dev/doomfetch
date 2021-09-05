@@ -20,7 +20,10 @@ export class DoomFetch<T> {
 		return this.#request
 	}
 	/**
-	 * Clone the current instance of DoomFetch	
+	 * Clone the current instance of DoomFetch
+	 * @example
+	 * const req = doomFetch("https://google.com")	
+	 * const req2 = req.clone().query("search", "doomfetch")
 	 */
 	clone() {
 		const instance = new DoomFetch<T>(this.url, this.#request.method)
@@ -79,6 +82,11 @@ export class DoomFetch<T> {
 	/**
 	 * A Headers object, an object literal, or an array of two-item arrays to set
 	 * request's headers.
+	 * @example
+	 * .headers({
+	 * 		authorization: "doomfetch",
+	 * 		"content-type": "application/json"
+	 * })
 	 */
 	headers = (input: Record<string, string>) => {
 		this.#request.headers = { ...this.#request.headers, ...input };
@@ -96,6 +104,11 @@ export class DoomFetch<T> {
 	/**
 	 * Add a queries to your url
 	 * request's query
+	 * @example
+	 * .queryMore({
+	 * 	 limit: "1",
+	 * 	 search: "doomfetch"
+	 * })
 	 */
 	queryMore = (input: Record<string, string>) => {
 		if (!(this.url instanceof URL)) this.url = new URL(this.url);
