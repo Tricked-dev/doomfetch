@@ -1,47 +1,55 @@
 //Most-Comments (C) Denoland https://github.com/denoland
-import type { BodyTypes, FixedRequest, Methods, BodyData } from './types.ts';
+import type {
+	BodyTypes,
+	FixedRequest,
+	Methods,
+	BodyData,
+	PathName,
+} from './types.ts';
 /**
  * DoomFetch class documentation:
- * 
+ *
  * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#DoomFetch
  */
 export class DoomFetch<T> {
 	#request: FixedRequest = {
 		headers: {},
 	};
-	constructor(private url: string | URL, method?: Methods) {
+	url: URL;
+	constructor(url: string | URL, method?: Methods) {
 		this.#request.method = method;
+		this.url = url instanceof URL ? url : new URL(url);
 	}
 	/**
 	 * Set the request
 	 */
 	set request(i: FixedRequest) {
-		this.#request = i
+		this.#request = i;
 	}
 	/**
 	 * Returns the request
 	 */
 	get request() {
-		return this.#request
+		return this.#request;
 	}
 	/**
 	 * Clone the current instance of DoomFetch
-	 * 
-	 * 
+	 *
+	 *
 	 * @example
-	 * const req = doomFetch("https://google.com")	
+	 * const req = doomFetch("https://google.com")
 	 * const req2 = req.clone().query("search", "doomfetch")
 	 */
 	clone = () => {
-		const instance = new DoomFetch<T>(this.url, this.#request.method)
+		const instance = new DoomFetch<T>(this.url, this.#request.method);
 		instance.request = {
 			...this.#request,
 			headers: {
-				...this.#request.headers
-			}
-		}
-		return instance
-	}
+				...this.#request.headers,
+			},
+		};
+		return instance;
+	};
 	/**
 	 * Internal function used to simplify code
 	 */
@@ -89,8 +97,8 @@ export class DoomFetch<T> {
 	/**
 	 * A Headers object, an object literal, or an array of two-item arrays to set
 	 * request's headers.
-	 * 
-	 * 
+	 *
+	 *
 	 * @example
 	 * .headers({
 	 * 		authorization: "doomfetch",
@@ -106,15 +114,14 @@ export class DoomFetch<T> {
 	 * request's query
 	 */
 	query = (key: string, value: string | number) => {
-		if (!(this.url instanceof URL)) this.url = new URL(this.url);
 		this.url.searchParams.append(key, value.toString());
 		return this;
 	};
 	/**
 	 * Add a queries to your url
 	 * request's query
-	 * 
-	 * 
+	 *
+	 *
 	 * @example
 	 * .queryMore({
 	 * 	 limit: "1",
@@ -122,7 +129,6 @@ export class DoomFetch<T> {
 	 * })
 	 */
 	queryMore = (input: Record<string, string>) => {
-		if (!(this.url instanceof URL)) this.url = new URL(this.url);
 		for (const [key, value] of Object.entries(input)) {
 			this.url.searchParams.append(key, value.toString());
 		}
@@ -210,12 +216,11 @@ export class DoomFetch<T> {
 		const res = await this.send();
 		return res.text();
 	};
-
 	/**
 	 * Send the request and return the normal response
 	 *
 	 * Use arrayBuffer, blob, formData, json, text, normal to return the response with the according body
-	 * 
+	 *
 	 * @example
 	 * .send("text") //Returns a text response
 	 * .send("json") //Sends a json response with the type you made when doing the request
@@ -250,5 +255,23 @@ export class DoomFetch<T> {
 			writable: false,
 		});
 		return response as BodyData<V, T>;
+	};
+	/**
+	 * URL METHODS
+	 */
+
+	/**
+	 * Set the url
+	 */
+	setURL = (url: string | URL) => {
+		this.url = url instanceof URL ? url : new URL(url);
+		return this;
+	};
+	/**
+	 * Set url path
+	 */
+	setUrlPath = (path: PathName) => {
+		this.url.pathname = path;
+		return this;
 	};
 }
