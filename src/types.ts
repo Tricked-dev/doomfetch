@@ -49,8 +49,32 @@ export interface Body<T extends keyof BodyTypes<V>, V>
 	extends Omit<Response, 'body'> {
 	readonly body: BodyTypes<V>[T];
 }
-
+/**
+ * Simple type to add intellisense
+ */
+export type fetchSupported = 'http://' | 'https://';
+/**
+ * Add string type otherwise the types are going to be annoying
+ */
+export type fetchRequest = `${fetchSupported}${string}` | string;
+/**
+ * All the types of url that work for Doomfetch
+ */
+export type Urls = fetchRequest | URL | Response;
 /**
  * Useful to stop people from making mistakes
  */
 export type PathName = `/${string}`;
+/**
+ * compression function
+ *
+ * https://deno.land/x/denoflate
+ */
+type CompressionFunction = (
+	t: Uint8Array,
+	...extra: any[]
+) => Uint8Array | Promise<Uint8Array>;
+/**
+ * Compression Object
+ */
+export type CompressionObject = Record<string, CompressionFunction>;

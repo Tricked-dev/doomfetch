@@ -5,6 +5,7 @@ import type {
 	Methods,
 	BodyData,
 	PathName,
+	Urls,
 } from './types.ts';
 import { compressions } from './compressions.ts';
 /**
@@ -18,9 +19,14 @@ export class DoomFetch<T> {
 	};
 	url: URL;
 	#compressed = false;
-	constructor(url: string | URL, method?: Methods) {
+	constructor(url: Urls, method?: Methods) {
 		this.#request.method = method;
-		this.url = url instanceof URL ? url : new URL(url);
+		this.url =
+			url instanceof URL
+				? url
+				: url instanceof Response
+				? new URL(url.url)
+				: new URL(url);
 	}
 	/**
 	 * Set the request
