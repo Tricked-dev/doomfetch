@@ -67,6 +67,8 @@ export class DoomFetch<T> {
 	}
 	/**
 	 * compress a requests response
+	 *
+	 * !!!MIGHT NOT WORK COULDNT GET API TO RETURN GZIP!!!
 	 */
 	compress = (bool = true) => {
 		if (bool === false) {
