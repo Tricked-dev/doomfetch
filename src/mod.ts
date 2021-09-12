@@ -6,6 +6,7 @@ import type {
 	BodyData,
 	PathName,
 } from './types.ts';
+import { compressions } from './compressions.ts';
 /**
  * DoomFetch class documentation:
  *
@@ -16,6 +17,7 @@ export class DoomFetch<T> {
 		headers: {},
 	};
 	url: URL;
+	#compressed = false;
 	constructor(url: string | URL, method?: Methods) {
 		this.#request.method = method;
 		this.url = url instanceof URL ? url : new URL(url);
@@ -57,7 +59,22 @@ export class DoomFetch<T> {
 		this.#request[input] = value;
 		return this;
 	}
+	/**
+	 * compress a requests response
+	 */
+	compress = (bool = true) => {
+		if (bool === false) {
+			this.#compressed = false;
+			delete this.#request.headers['Accept-Encoding'];
+			return this;
+		}
+		this.#compressed = bool;
+		this.#request.headers['Accept-Encoding'] =
+			Object.keys(compressions).join(', ');
+		this.#request.headers['Accept'] = '*';
 
+		return this;
+	};
 	/**
 	 * A BodyInit object or null to set request's body.
 	 */
@@ -230,25 +247,34 @@ export class DoomFetch<T> {
 	): Promise<BodyData<V, T>> => {
 		let data;
 		const response = await fetch(this.url, this.#request);
-		switch (bodyType) {
-			case 'arrayBuffer':
-				data = response.arrayBuffer();
-				break;
-			case 'blob':
-				data = response.blob();
-				break;
-			case 'formData':
-				data = response.formData();
-				break;
-			case 'json':
-				data = response.json();
-				break;
-			case 'text':
-				data = response.text();
-				break;
-			default:
-				return response as BodyData<V, T>;
+		const encoding = response.headers.get('encoding');
+		if (this.#compressed && encoding) {
+			const decoder = compressions[encoding];
+			data = new TextDecoder().decode(
+				await decoder(new Uint8Array(await response.arrayBuffer()))
+			);
+		} else {
+			switch (bodyType) {
+				case 'arrayBuffer':
+					data = response.arrayBuffer();
+					break;
+				case 'blob':
+					data = response.blob();
+					break;
+				case 'formData':
+					data = response.formData();
+					break;
+				case 'json':
+					data = response.json();
+					break;
+				case 'text':
+					data = response.text();
+					break;
+				default:
+					return response as BodyData<V, T>;
+			}
 		}
+
 		//Hacky solution to avoid the getter
 		Object.defineProperty(response, 'body', {
 			value: await data,
