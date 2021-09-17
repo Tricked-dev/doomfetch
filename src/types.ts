@@ -64,17 +64,4 @@ export type Urls = fetchRequest | URL | Response;
 /**
  * Useful to stop people from making mistakes
  */
-export type PathName = `/${string}`;
-/**
- * compression function
- *
- * https://deno.land/x/denoflate
- */
-type CompressionFunction = (
-	t: Uint8Array,
-	...extra: any[]
-) => Uint8Array | Promise<Uint8Array>;
-/**
- * Compression Object
- */
-export type CompressionObject = Record<string, CompressionFunction>;
+export type PathName = `/${string}` | string;

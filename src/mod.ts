@@ -7,7 +7,7 @@ import type {
 	PathName,
 	Urls,
 } from './types.ts';
-import { compressions } from './compressions.ts';
+
 /**
  * DoomFetch class documentation:
  *
@@ -18,7 +18,7 @@ export class DoomFetch<T> {
 		headers: {},
 	};
 	url: URL;
-	#compressed = false;
+
 	constructor(url: Urls, method?: Methods) {
 		this.#request.method = method;
 		this.url =
@@ -28,6 +28,7 @@ export class DoomFetch<T> {
 				? new URL(url.url)
 				: new URL(url);
 	}
+
 	/**
 	 * Set the request
 	 */
@@ -65,24 +66,7 @@ export class DoomFetch<T> {
 		this.#request[input] = value;
 		return this;
 	}
-	/**
-	 * compress a requests response
-	 *
-	 * !!!MIGHT NOT WORK COULDNT GET API TO RETURN GZIP!!!
-	 */
-	compress = (bool = true) => {
-		if (bool === false) {
-			this.#compressed = false;
-			delete this.#request.headers['Accept-Encoding'];
-			return this;
-		}
-		this.#compressed = bool;
-		this.#request.headers['Accept-Encoding'] =
-			Object.keys(compressions).join(', ');
-		this.#request.headers['Accept'] = '*';
 
-		return this;
-	};
 	/**
 	 * A BodyInit object or null to set request's body.
 	 */
@@ -255,32 +239,25 @@ export class DoomFetch<T> {
 	): Promise<BodyData<V, T>> => {
 		let data;
 		const response = await fetch(this.url, this.#request);
-		const encoding = response.headers.get('encoding');
-		if (this.#compressed && encoding) {
-			const decoder = compressions[encoding];
-			data = new TextDecoder().decode(
-				await decoder(new Uint8Array(await response.arrayBuffer()))
-			);
-		} else {
-			switch (bodyType) {
-				case 'arrayBuffer':
-					data = response.arrayBuffer();
-					break;
-				case 'blob':
-					data = response.blob();
-					break;
-				case 'formData':
-					data = response.formData();
-					break;
-				case 'json':
-					data = response.json();
-					break;
-				case 'text':
-					data = response.text();
-					break;
-				default:
-					return response as BodyData<V, T>;
-			}
+
+		switch (bodyType) {
+			case 'arrayBuffer':
+				data = response.arrayBuffer();
+				break;
+			case 'blob':
+				data = response.blob();
+				break;
+			case 'formData':
+				data = response.formData();
+				break;
+			case 'json':
+				data = response.json();
+				break;
+			case 'text':
+				data = response.text();
+				break;
+			default:
+				return response as BodyData<V, T>;
 		}
 
 		//Hacky solution to avoid the getter
