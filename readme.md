@@ -81,20 +81,20 @@ await doomFetch('https://example.com')
 #### Clone a request
 
 ```ts
-const request = doomFetch('https://google.com');
+const request = doomFetch('https://example.com');
 const request2 = request.clone();
 ```
 
 #### Changing the url path
 
 ```ts
-doomFetch('https://google.com/cool').setUrlPath('/404');
+doomFetch('https://example.com/cool').setUrlPath('/404');
 ```
 
 #### Changing the url
 
 ```ts
-doomFetch('https://google.com/cool').setUrl('https://youtube.com');
+doomFetch('https://example.com/cool').setUrl('https://youtube.com');
 ```
 
 #### Creating a doomfetch instance from a fetch request
@@ -103,7 +103,7 @@ You can use the from method.
 
 ```ts
 import { DoomFetch } from 'https://deno.land/x/doomfetch/mod.ts';
-DoomFetch.from('https://google.com', {
+DoomFetch.from('https://example.com', {
 	method: 'get',
 	body: JSON.stringify({
 		some: 'body',
@@ -114,7 +114,7 @@ DoomFetch.from('https://google.com', {
 or you can set the request
 
 ```ts
-const req = doomfetch('https://google.com', 'GET').header('some', 'header');
+const req = doomfetch('https://example.com', 'GET').header('some', 'header');
 req.request = {
 	headers: {
 		newheaders: 'are here',
@@ -127,7 +127,7 @@ req.request = {
 Redirect is a default thing and you can access it from doomFetch same for every other option in fetch
 
 ```ts
-doomFetch('https://google.com').redirect(false);
+doomFetch('https://example.com').redirect(false);
 ```
 
 ## Documentation

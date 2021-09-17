@@ -53,7 +53,7 @@ export class DoomFetch<T> {
 	 *
 	 *
 	 * @example
-	 * const req = doomFetch("https://google.com")
+	 * const req = doomFetch("https://example.com")
 	 * const req2 = req.clone().query("search", "doomfetch")
 	 */
 	clone = () => {
