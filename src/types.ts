@@ -17,7 +17,7 @@ export type Methods =
  *
  * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#FixedRequest
  */
-export interface FixedRequest extends Omit<RequestInit, 'headers' | 'method'> {
+export interface DoomRequest extends Omit<RequestInit, 'headers' | 'method'> {
 	headers: Record<string, string>;
 	method?: Methods;
 }

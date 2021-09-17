@@ -1,7 +1,7 @@
 //Most-Comments (C) Denoland https://github.com/denoland
 import type {
 	BodyTypes,
-	FixedRequest,
+	DoomRequest,
 	Methods,
 	BodyData,
 	PathName,
@@ -14,7 +14,7 @@ import type {
  * https://doc.deno.land/https/deno.land/x/doomfetch/mod.ts#DoomFetch
  */
 export class DoomFetch<T> {
-	#request: FixedRequest = {
+	#request: DoomRequest = {
 		headers: {},
 	};
 	url: URL;
@@ -28,11 +28,18 @@ export class DoomFetch<T> {
 				? new URL(url.url)
 				: new URL(url);
 	}
-
+	/**
+	 * Initialize a doomFetch instance with a custom request body
+	 */
+	static from<T>(url: Urls, body?: DoomRequest) {
+		const doomfetch = new DoomFetch<T>(url, body?.method);
+		if (body) doomfetch.request = body;
+		return doomfetch;
+	}
 	/**
 	 * Set the request
 	 */
-	set request(i: FixedRequest) {
+	set request(i: DoomRequest) {
 		this.#request = i;
 	}
 	/**
@@ -62,7 +69,7 @@ export class DoomFetch<T> {
 	/**
 	 * Internal function used to simplify code
 	 */
-	#setThis(input: keyof FixedRequest, value: any) {
+	#setThis(input: keyof DoomRequest, value: any) {
 		this.#request[input] = value;
 		return this;
 	}

@@ -9,11 +9,14 @@ A simple utility to make using fetch "easier" using a class based approach
 		- [Features:](#features)
 		- [Using doomFetch](#using-doomfetch)
 			- [Simple Example](#simple-example)
-			- [Fetching a image and getting the blob.](#fetching-a-image-and-getting-the-blob)
+			- [Fetching a image and getting the blob](#fetching-a-image-and-getting-the-blob)
 			- [Sending a json body](#sending-a-json-body)
-			- [Specify headers](#specify-headers)
+			- [Specifying headers](#specifying-headers)
 			- [Clone a request](#clone-a-request)
-			- [More examples](#more-examples)
+			- [Changing the url path](#changing-the-url-path)
+			- [Changing the url](#changing-the-url)
+			- [Creating a doomfetch instance from a fetch request](#creating-a-doomfetch-instance-from-a-fetch-request)
+			- [Using default request methods](#using-default-request-methods)
 	- [Documentation](#documentation)
 
 ### Features:
@@ -43,32 +46,34 @@ await doomFetch<DenoModuleInterface>('https://api.deno.land/modules', 'GET')
 	.json();
 ```
 
-#### Fetching a image and getting the blob.
+#### Fetching a image and getting the blob
 
 ```ts
-const res = await doomFetch(
+await doomFetch(
 	'https://denolib.github.io/high-res-deno-logo/deno_hr.png'
 ).send('blob');
 
 //Res.body now has the blob type and is a blob
-res.body;
 ```
 
 #### Sending a json body
 
 ```ts
-await doomFetch('https://example.com')
-	.body({
-		name: 'skyblockdev',
-	})
-	.send('text');
+await doomFetch('https://example.com').body({
+	name: 'skyblockdev',
+});
 ```
 
-#### Specify headers
+#### Specifying headers
 
 ```ts
 await doomFetch('https://example.com')
 	.header('Content-Type', 'application/json')
+	.text();
+```
+
+```ts
+await doomFetch('https://example.com')
 	.headers({ 'Content-Type': 'application/json' })
 	.text();
 ```
@@ -76,42 +81,53 @@ await doomFetch('https://example.com')
 #### Clone a request
 
 ```ts
-const request = doomFetch('https://google.com').header('api-key', '');
-const request2 = request.clone().header('content-type', 'application/json');
+const request = doomFetch('https://google.com');
+const request2 = request.clone();
 ```
 
-#### More examples
+#### Changing the url path
 
 ```ts
-//Promise<Blob>
-const res = await doomFetch('https://duckduckgo.com', 'GET')
-	.header('from', 'doomfetch :)')
-	//Simple shortcuts to not have todo .then(r=> r.json()) instead just use .json() or .Blob() or any of those methods
-	.blob();
-//Promise<Response>
-const res = await doomFetch('https://duckduckgo.com', 'GET')
-	.redirect(true)
-	//Not specifying anything just returns a regular response
-	.send();
+doomFetch('https://google.com/cool').setUrlPath('/404');
 ```
 
-```ts
-const data = await doomFetch(
-	'https://deno.land/x/doomfetch/mod.ts',
-	'GET'
-).send('text');
-console.log(data.body);
+#### Changing the url
 
-const data1 = await doomFetch('https://someapilockedwithheaders', 'POST')
-	.body({
-		input: 'some sentence',
-	})
-	.header('api-key', 'cool key')
-	.headers({
-		'content-type': 'appilication/json',
-		'authorization': 'Bearer cool api key again',
-	})
-	.text();
+```ts
+doomFetch('https://google.com/cool').setUrl('https://youtube.com');
+```
+
+#### Creating a doomfetch instance from a fetch request
+
+You can use the from method.
+
+```ts
+import { DoomFetch } from 'https://deno.land/x/doomfetch/mod.ts';
+DoomFetch.from('https://google.com', {
+	method: 'get',
+	body: JSON.stringify({
+		some: 'body',
+	}),
+});
+```
+
+or you can set the request
+
+```ts
+const req = doomfetch('https://google.com', 'GET').header('some', 'header');
+req.request = {
+	headers: {
+		newheaders: 'are here',
+	},
+};
+```
+
+#### Using default request methods
+
+Redirect is a default thing and you can access it from doomFetch same for every other option in fetch
+
+```ts
+doomFetch('https://google.com').redirect(false);
 ```
 
 ## Documentation
