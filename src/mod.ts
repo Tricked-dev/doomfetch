@@ -95,7 +95,9 @@ export class DoomFetch<T> {
 
 		return this;
 	};
-
+	/**
+	 * Makes it so the request retries after failing ( !res.ok ) useful for unstable api's
+	 */
 	retry = (times: true | number = 5) => {
 		if (times == true) times = 5;
 		this.#retrylimit = times;

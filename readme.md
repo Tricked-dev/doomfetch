@@ -12,6 +12,7 @@ A simple utility to make using fetch "easier" using a class based approach
 			- [Fetching a image and getting the blob](#fetching-a-image-and-getting-the-blob)
 			- [Sending a json body](#sending-a-json-body)
 			- [Specifying headers](#specifying-headers)
+			- [Retrying](#retrying)
 			- [Clone a request](#clone-a-request)
 			- [Changing the url path](#changing-the-url-path)
 			- [Changing the url](#changing-the-url)
@@ -76,6 +77,15 @@ await doomFetch('https://example.com')
 await doomFetch('https://example.com')
 	.headers({ 'Content-Type': 'application/json' })
 	.text();
+```
+
+#### Retrying
+
+Ever had to deal with a api that just randomly fails?
+
+```ts
+//5 being the amount of times to retry
+doomFetch('https://example.com').retry(5).send();
 ```
 
 #### Clone a request
