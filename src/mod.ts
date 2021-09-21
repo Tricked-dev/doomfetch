@@ -96,6 +96,22 @@ export class DoomFetch<T> {
 		return this;
 	};
 	/**
+	 * ### Attach a file as formdata this overwrites the body!
+	 *
+	 * formdata: https://developer.mozilla.org/en-US/docs/Web/API/FormData
+	 *
+	 * ref: https://stackoverflow.com/questions/48447550/how-can-i-send-a-binary-data-blob-using-fetch-and-formdata
+	 */
+	file = (file: Blob | ArrayBuffer | string, name: string, type?: string) => {
+		if (!(file instanceof Blob)) {
+			file = new Blob([file], { type: type });
+		}
+		let formData = new FormData();
+		formData.append(name, file);
+		this.#request.body = formData;
+		return this;
+	};
+	/**
 	 * Makes it so the request retries after failing ( !res.ok ) useful for unstable api's
 	 */
 	retry = (times: true | number = 5) => {

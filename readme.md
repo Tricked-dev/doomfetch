@@ -12,6 +12,7 @@ A simple utility to make using fetch "easier" using a class based approach
 			- [Fetching a image and getting the blob](#fetching-a-image-and-getting-the-blob)
 			- [Sending a json body](#sending-a-json-body)
 			- [Specifying headers](#specifying-headers)
+			- [Sending a file](#sending-a-file)
 			- [Retrying](#retrying)
 			- [Clone a request](#clone-a-request)
 			- [Changing the url path](#changing-the-url-path)
@@ -77,6 +78,17 @@ await doomFetch('https://example.com')
 await doomFetch('https://example.com')
 	.headers({ 'Content-Type': 'application/json' })
 	.text();
+```
+
+#### Sending a file
+
+neat shortcut that allows uploading arraybuffers/blobs/string as blob in formdata
+
+```ts
+await doomFetch('https://example.com').file(
+	await Deno.readFile('file.text'),
+	'data'
+);
 ```
 
 #### Retrying
