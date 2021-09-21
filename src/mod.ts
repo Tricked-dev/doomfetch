@@ -96,7 +96,7 @@ export class DoomFetch<T> {
 		return this;
 	};
 	/**
-	 * ### Attach a file as formdata this overwrites the body!
+	 * ### Attach a file as formdata this overwrites the body! unless the body is formdata already
 	 *
 	 * formdata: https://developer.mozilla.org/en-US/docs/Web/API/FormData
 	 *
@@ -106,7 +106,11 @@ export class DoomFetch<T> {
 		if (!(file instanceof Blob)) {
 			file = new Blob([file], { type: type });
 		}
-		let formData = new FormData();
+
+		let formData =
+			this.#request.body instanceof FormData
+				? this.#request.body
+				: new FormData();
 		formData.append(name, file);
 		this.#request.body = formData;
 		return this;
