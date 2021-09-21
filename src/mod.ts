@@ -21,12 +21,17 @@ export class DoomFetch<T> {
 
 	constructor(url: Urls, method?: Methods) {
 		this.#request.method = method;
-		this.url =
-			url instanceof URL
-				? url
-				: url instanceof Response
-				? new URL(url.url)
-				: new URL(url);
+		this.url = DoomFetch.resolveURL(url);
+	}
+	/**
+	 * Method to resolve a url out of a string/URL/Response
+	 */
+	static resolveURL(url: Urls) {
+		return url instanceof URL
+			? url
+			: url instanceof Response
+			? new URL(url.url)
+			: new URL(url);
 	}
 	/**
 	 * Initialize a doomFetch instance with a custom request body
@@ -281,8 +286,8 @@ export class DoomFetch<T> {
 	/**
 	 * Set the url
 	 */
-	setURL = (url: string | URL) => {
-		this.url = url instanceof URL ? url : new URL(url);
+	setURL = (url: Urls) => {
+		this.url = DoomFetch.resolveURL(url);
 		return this;
 	};
 	/**
