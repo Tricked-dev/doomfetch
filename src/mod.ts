@@ -17,6 +17,7 @@ export class DoomFetch<T> {
 	#request: DoomRequest = {
 		headers: {},
 	};
+	#retrylimit = 0;
 	url: URL;
 
 	constructor(url: Urls, method?: Methods) {
@@ -95,6 +96,11 @@ export class DoomFetch<T> {
 		return this;
 	};
 
+	retry = (times: true | number = 5) => {
+		if (times == true) times = 5;
+		this.#retrylimit = times;
+		return this;
+	};
 	/**
 	 * A string indicating how the request will interact with the browser's cache
 	 * to set request's cache.
@@ -251,7 +257,10 @@ export class DoomFetch<T> {
 	): Promise<BodyData<V, T>> => {
 		let data;
 		const response = await fetch(this.url, this.#request);
-
+		if (!response.ok && this.#retrylimit !== 0) {
+			this.#retrylimit--;
+			return this.send(bodyType);
+		}
 		switch (bodyType) {
 			case 'arrayBuffer':
 				data = response.arrayBuffer();
