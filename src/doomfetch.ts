@@ -102,9 +102,25 @@ export class DoomFetch<T> {
 	 *
 	 * ref: https://stackoverflow.com/questions/48447550/how-can-i-send-a-binary-data-blob-using-fetch-and-formdata
 	 */
-	file = (file: Blob | ArrayBuffer | string, name: string, type?: string) => {
-		if (!(file instanceof Blob)) {
-			file = new Blob([file], { type: type });
+	file = (
+		file: Blob | BufferSource | string,
+		name: string,
+		options?: {
+			type?: string;
+			asFile?: boolean;
+			filename?: string;
+			lastModified?: number;
+			ending?: 'transparent' | 'native';
+		}
+	) => {
+		if (options?.asFile && !(file instanceof File)) {
+			file = new File([file], options?.filename || name, {
+				type: options?.type,
+				lastModified: options?.lastModified,
+				endings: options?.ending,
+			});
+		} else if (!(file instanceof Blob)) {
+			file = new Blob([file], { type: options?.type });
 		}
 
 		let formData =
