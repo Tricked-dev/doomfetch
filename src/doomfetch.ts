@@ -24,6 +24,21 @@ export class DoomFetch<T> {
 		this.#request.method = method;
 		this.url = DoomFetch.resolveURL(url);
 	}
+	static get<T = any>(url: Urls) {
+		return new DoomFetch<T>(url, 'GET');
+	}
+	static post<T = any>(url: Urls) {
+		return new DoomFetch<T>(url, 'POST');
+	}
+	static put<T = any>(url: Urls) {
+		return new DoomFetch<T>(url, 'PUT');
+	}
+	static patch<T = any>(url: Urls) {
+		return new DoomFetch<T>(url, 'PATCH');
+	}
+	static head<T = any>(url: Urls) {
+		return new DoomFetch<T>(url, 'HEAD');
+	}
 	/**
 	 * Method to resolve a url out of a string/URL/Response
 	 */
@@ -293,7 +308,6 @@ export class DoomFetch<T> {
 	send = async <V extends keyof BodyTypes<T> = 'normal'>(
 		bodyType?: V
 	): Promise<BodyData<V, T>> => {
-		console.log(this.#request);
 		const response = await fetch(this.url, this.#request);
 		if (!response.ok && this.#retrylimit !== 0) {
 			this.#retrylimit--;

@@ -1,16 +1,4 @@
-export type Methods =
-	| 'GET'
-	| 'get'
-	| 'POST'
-	| 'post'
-	| 'PUT'
-	| 'put'
-	| 'PATCH'
-	| 'patch'
-	| 'DELETE'
-	| 'delete'
-	| 'HEAD'
-	| 'head';
+export type Methods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD';
 
 /**
  * Request edited to work better with doomfetch
